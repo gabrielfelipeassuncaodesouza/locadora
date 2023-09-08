@@ -1,10 +1,13 @@
 CC=gcc
 TARGET=locadora
-OBJS=locadora.c gutils.c
-CFLAGS=-Wall -pedantic -std=c99
+OBJS=main.o
+CFLAGS=-Wall -pedantic -std=c99 -g
 
 $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(OBJS) $(CFLAGS)
 
 clear:
-	rm -rf $(TARGET)
+	rm -rf $(TARGET) *.o .*.o *~
+
+run:
+	@ ./$(TARGET)
