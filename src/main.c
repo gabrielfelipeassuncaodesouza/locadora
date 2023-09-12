@@ -1,41 +1,12 @@
+#include "gutils.h"
+#include "globals.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define ARQUIVO "filmes.txt"
-
-#define MAX_STR 100
-#define MAX_MOVIES 5
-
-typedef struct {
-    char* title;
-    char* director;
-    int yearOfRelease;
-    double rating;
-    int qtde;
-} movie_t;
-
 movie_t movies[MAX_MOVIES];
-
 int totalFilmes = 0;
-
-void readline(const char* msg, char* dest) {
-  printf(msg);
-  fgets(dest, MAX_STR, stdin);
-  dest[strcspn(dest, "\n")] = '\0';
-}
-
-void readint(const char* msg, int* dest) {
-  printf(msg);
-  scanf("%d", dest);
-  while(getchar() != '\n');
-}
-
-void readdouble(const char* msg, double* dest) {
-  printf(msg);
-  scanf("%lf", dest);
-  while(getchar() != '\n');
-}
 
 void aloca(movie_t* m) {
   m->title = (char*)malloc(sizeof(char)*MAX_STR);
@@ -51,7 +22,7 @@ void cadastrarFilme() {
     movie_t f;
     aloca(&f);
 
-    printf("\n--- Cadastro de Filme ---\n");
+    printf("\n--- Cadastro de Filme ---\n\n");
 
     readline("Enter the name of the movie: ", f.title);
     readline("Enter the name of the director: ", f.director);
@@ -62,41 +33,68 @@ void cadastrarFilme() {
     movies[totalFilmes++] = f;
 }
 
-void exibirFilme() {
-    int index;
-    readint("Type the index of the film: ", &index);
+int isEqual(movie_t m1, movie_t m2) {
+  return strcmp(m1.title, m2.title) == 0 &&
+          strcmp(m1.director, m2.director) == 0 &&
+          m1.yearOfRelease == m2.yearOfRelease &&
+          m1.rating == m2.rating &&
+          m1.qtde == m2.qtde;
+}
 
+movie_t getMovie(movie_t movies[], char* name) {
+  for(int i = 0; i < totalFilmes; i++) {
+    if(strcmp(name, movies[i].title) == 0) {
+      return movies[i];
+    }
+  }
+
+  return EMPTY_MOVIE;
+}
+
+void exibirFilme() {
     if(totalFilmes == 0) {
       printf("No films on storage!\n");
-    }
-
-    if(index < 0 || index >= totalFilmes) {
-      printf("Invalid index!\n");
       return;
     }
 
-    movie_t f = movies[index];
-    printf("\nTítulo: %s\n", f.title);
-    printf("Diretor: %s\n", f.director);
-    printf("Ano de Lançamento: %d\n", f.yearOfRelease);
-    printf("Classificação: %.2lf\n", f.rating);
-    printf("Quantidade em estoque: %d\n", f.qtde);
+    char name[MAX_STR];
+    readline("\nType the name of the film: ", name);
+    movie_t ret = getMovie(movies, name);
+
+    if(isEqual(ret, EMPTY_MOVIE)) {
+      printf("\nNo film found\n\n");
+      return;
+    }    
+
+    printf("\nTítulo: %s\n", ret.title);
+    printf("Diretor: %s\n", ret.director);
+    printf("Ano de Lançamento: %d\n", ret.yearOfRelease);
+    printf("Classificação: %.2lf\n", ret.rating);
+    printf("Quantidade em estoque: %d\n", ret.qtde);
+
+    putchar('\n');
 }
 
 void mostrarFilmes() {
     printf("\n--- Lista de Filmes ---\n\n");
 
     if (totalFilmes == 0) {
-        printf("No films on storage!\n");
+        printf("\nNo films on storage!\n\n");
         return;
     }
 
     for (int i = 0; i < totalFilmes; i++) {
       printf("%s\n", movies[i].title);
     }
+    putchar('\n');
 }
 
 void salvarFilmes() {
+    if(totalFilmes == 0) {
+      printf("\nNo film storaged\n\n");
+      return;
+    }
+
     FILE *file = fopen(ARQUIVO, "w");
     if (file == NULL) {
         printf("Erro ao salvar os filmes!\n");
@@ -113,7 +111,7 @@ void salvarFilmes() {
     }
 
     fclose(file);
-    printf("Filmes salvos com sucesso!\n");
+    printf("\nFilmes salvos com sucesso!\n\n");
 }
 
 void carregarFilmes() {
@@ -166,7 +164,7 @@ void handle(int opt) {
       salvarFilmes();
       break;
     case 5:
-      break;
+      return;
     default:
       printf("Invalid option!\n");
   }
