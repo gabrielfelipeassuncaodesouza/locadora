@@ -41,17 +41,17 @@ int isEqual(movie_t m1, movie_t m2) {
           m1.qtde == m2.qtde;
 }
 
-movie_t getMovie(movie_t movies[], char* name) {
+movie_t* getMovie(movie_t movies[], char* name) {
   for(int i = 0; i < totalFilmes; i++) {
     if(strcmp(name, movies[i].title) == 0) {
-      return movies[i];
+      return &movies[i];
     }
   }
 
-  return EMPTY_MOVIE;
+  return NULL;
 }
 
-void exibirFilme() {
+void searchMovie() {
     if(totalFilmes == 0) {
       printf("No films on storage!\n");
       return;
@@ -59,23 +59,23 @@ void exibirFilme() {
 
     char name[MAX_STR];
     readline("\nType the name of the film: ", name);
-    movie_t ret = getMovie(movies, name);
+    movie_t* ret = getMovie(movies, name);
 
-    if(isEqual(ret, EMPTY_MOVIE)) {
+    if(ret == NULL) {
       printf("\nNo film found\n\n");
       return;
     }    
 
-    printf("\nTítulo: %s\n", ret.title);
-    printf("Diretor: %s\n", ret.director);
-    printf("Ano de Lançamento: %d\n", ret.yearOfRelease);
-    printf("Classificação: %.2lf\n", ret.rating);
-    printf("Quantidade em estoque: %d\n", ret.qtde);
+    printf("\nTítulo: %s\n", ret->title);
+    printf("Diretor: %s\n", ret->director);
+    printf("Ano de Lançamento: %d\n", ret->yearOfRelease);
+    printf("Classificação: %.2lf\n", ret->rating);
+    printf("Quantidade em estoque: %d\n", ret->qtde);
 
     putchar('\n');
 }
 
-void mostrarFilmes() {
+void showMovies() {
     printf("\n--- Lista de Filmes ---\n\n");
 
     if (totalFilmes == 0) {
@@ -84,7 +84,7 @@ void mostrarFilmes() {
     }
 
     for (int i = 0; i < totalFilmes; i++) {
-      printf("%s\n", movies[i].title);
+      printf("%d -- %s\n", i+1, movies[i].title);
     }
     putchar('\n');
 }
@@ -149,21 +149,58 @@ void pause(const char* msg) {
   getchar();
 }
 
+void rentMovie() {
+  if(totalFilmes == 0) {
+    printf("No films on storage!\n");
+    return;
+  }
+
+  char name[MAX_STR];
+  readline("\nType the name of the film: ", name);
+  movie_t* ret = getMovie(movies, name);
+
+  if(ret == NULL) {
+    printf("\nNo film found\n\n");
+    return;
+  }
+
+  int qtde;
+  readint("Insert the quantity of copys: ", &qtde);
+
+  if(qtde > ret->qtde) {
+    printf("\nError: Insuficient stock\n\n");
+    return;
+  }
+
+  ret->qtde-=qtde;
+  printf("\nMovie has been rented sucessfully\n\n");
+}
+
+void generateReceive() {
+
+}
+
 void handle(int opt) {
   switch(opt) {
     case 1:
       cadastrarFilme();
       break;
     case 2:
-      mostrarFilmes();
+      showMovies();
       break;
     case 3:
-      exibirFilme();
+      searchMovie();
       break;
     case 4:
-      salvarFilmes();
+      rentMovie();
       break;
     case 5:
+      salvarFilmes();
+      break;
+    case 6:
+      generateReceive();
+      break;
+    case 7:
       return;
     default:
       printf("Invalid option!\n");
@@ -182,15 +219,16 @@ int main() {
         printf("\nLocadora de Filmes\n");
         printf("\n1 - Cadastrar Filme\n");
         printf("2 - Ver Filmes Cadastrados\n");
-        printf("3 - Ver Dados de um filme\n");
-        printf("4 - Salvar Filmes \n");
-        printf("5 - Quit\n");
+        printf("3 - Pesquisar um filme\n");
+        printf("4 - Rent a movie\n");
+        printf("5 - Salvar Filmes \n");
+        printf("6 - Quit\n");
         
         readint("\n$> ", &opt);
 
         handle(opt); 
 
-    } while(opt != 5);
+    } while(opt != 6);
 
     return 0;
 }

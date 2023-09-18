@@ -5,6 +5,7 @@
 
 #define MAX_STR 100
 #define MAX_MOVIES 5
+#define MOVIE_PRICE 10
 
 typedef struct {
     char* title;
