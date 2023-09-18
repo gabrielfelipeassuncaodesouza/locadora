@@ -9,6 +9,12 @@ void readline(const char* msg, char* dest) {
   dest[strcspn(dest, "\n")] = '\0';
 }
 
+void readchar(const char* msg, char* dest) {
+  printf(msg);
+  scanf("%c", dest);
+  while(getchar() != '\n');
+}
+
 void readint(const char* msg, int* dest) {
   printf(msg);
   scanf("%d", dest);

@@ -1,1 +1,1 @@
-{ "Caes de Aluguel", "Quentin Tarantino", 1993, 10.00, 1000 }
+{ "Caes de aluguel", "Quentin Tarantino", 1993, 10.00, 8, 2 }

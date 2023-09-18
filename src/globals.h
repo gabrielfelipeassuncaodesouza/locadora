@@ -13,8 +13,7 @@ typedef struct {
     int yearOfRelease;
     double rating;
     int qtde;
+    int rent;
 } movie_t;
-
-#define EMPTY_MOVIE (movie_t){"", "", 0, 0.0, 0}
 
 #endif
