@@ -1,2 +1,3 @@
-{ "Caes de aluguel", "Quentin Tarantino", 1993, 10.00, 10, 0 }
-{ "Teste", "teste", 2023, 10.00, 10, 0 }
+2
+{ "Caes de Aluguel", "Quentin Tarantino", 1993, 10.00, 10, 0 }
+{ "Interestelar", "Christopher Nolan", 2014, 10.00, 10, 0 }

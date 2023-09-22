@@ -1,6 +1,8 @@
 #ifndef _H_GLOBALS
 #define _H_GLOBALS
 
+#include <stdbool.h>
+
 #define ARQUIVO "filmes.txt"
 
 #define MAX_STR 100
@@ -19,7 +21,7 @@ typedef struct {
 typedef struct {
   movie_t movies[MAX_MOVIES];
   int totalMovies;
-  int dirty;
+  bool dirty;
 } state_t;
 
 movie_t* getMovie();

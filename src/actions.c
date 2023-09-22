@@ -74,6 +74,10 @@ void saveMovies(state_t* s) {
     return;
   }
 
+  fseek(file, 0, SEEK_SET);
+  fprintf(file, "%d\n", s->totalMovies);
+  fseek(file, 0, SEEK_END);
+
   for (int i = 0; i < s->totalMovies; i++) {
     fprintf(file, "{ \"%s\", \"%s\", %d, %.2lf, %d, %d }\n", 
         s->movies[i].title, 
@@ -86,6 +90,7 @@ void saveMovies(state_t* s) {
 
   fclose(file);
   printf("\nFilmes salvos com sucesso!\n\n");
+  s->dirty = false;
 }
 
 void loadMovies(state_t *s) {
@@ -95,18 +100,21 @@ void loadMovies(state_t *s) {
         return;
     }
 
-    movie_t m;
-    aloca(&m);
+    int qtde;
+    fscanf(file, "%d\n", &qtde);
 
-    while(fscanf(file, "{ \"%[^\"]\", \"%[^\"]\", %d, %lf, %d, %d }\n", 
-                  m.title, 
-                  m.director, 
-                  &m.yearOfRelease, 
-                  &m.rating, 
-                  &m.qtde,
-                  &m.rent) != EOF) {
+    aloca(&(s->movies[s->totalMovies]));
 
-        s->movies[s->totalMovies++] = m;
+    for(int i = 0; i < qtde; i++) {
+      fscanf(file, "{ \"%[^\"]\", \"%[^\"]\", %d, %lf, %d, %d }\n", 
+                  s->movies[s->totalMovies].title, 
+                  s->movies[s->totalMovies].director, 
+                  &(s->movies[s->totalMovies].yearOfRelease), 
+                  &(s->movies[s->totalMovies].rating), 
+                  &(s->movies[s->totalMovies].qtde),
+                  &(s->movies[s->totalMovies].rent));
+
+      aloca(&(s->movies[++(s->totalMovies)]));
     }
 
     fclose(file);
