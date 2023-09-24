@@ -1,10 +1,47 @@
+#include "actions.h"
 #include "gutils.h"
 #include "globconst.h"
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
-void cadastrarFilme(state_t* s) {
+movie_t* getMovie(state_t* s) {
+  if(s->totalMovies == 0) {
+    printf("\nNo films on storage!\n\n");
+    return NULL;
+  }
+
+  movie_t* ret = NULL;
+
+  char name[MAX_STR];
+  char director[MAX_STR];
+
+  int choice;
+  do {
+    readint("\nDo you wanna search by name (1), director (2) or name AND director (3)? ", &choice);
+  } while(choice < 1 || choice > 3);
+
+  if(choice == 1 || choice == 3)
+    readline("\nType the name of the film: ", name);
+
+  if(choice == 2 || choice == 3)
+    readline("\nType the name of the director: ", director);
+
+  for(int i = 0; i < s->totalMovies; i++) {
+
+    int comp = (choice == 1) ? strcmp(name, s->movies[i].title) : (choice == 2) ? strcmp(director, s->movies[i].director) : (strcmp(name, s->movies[i].title) || strcmp(director, s->movies[i].director));   
+
+    if(comp == 0) {
+      ret = &(s->movies[i]);
+      break;
+    }
+  }
+
+  return ret;
+}
+
+void registerMovie(state_t* s) {
     if(s->totalMovies ==  MAX_MOVIES) {
       printf("Got limit of films\n");
       return;
@@ -30,8 +67,8 @@ void cadastrarFilme(state_t* s) {
     s->dirty = true;
 }
 
-void searchMovie() {
-  movie_t* ret = getMovie();
+void searchMovie(state_t *s) {
+  movie_t* ret = getMovie(s);
 
   if(ret == NULL) {
     printf("\nNo film found\n\n");
@@ -45,7 +82,64 @@ void searchMovie() {
   printf("Quantidade em estoque: %d\n", ret->qtde);
   printf("Cópias alugadas: %d\n", ret->rent);
 
-  putchar('\n');
+  int choice;
+  printf("\nOptions avaliables: \n\n");
+  printf("1 - Rent the movie\n");
+  printf("2 - Delete the movie\n");
+  printf("NoneOfAbove - Do nothing\n");
+
+  readint("\n$> ", &choice);
+
+  if(choice == 1) {
+    rentMovie(ret);
+    s->dirty = true;
+  }
+  else if(choice == 2) {
+    deleteMovie(s, ret);
+    s->dirty = true;
+  }
+}
+
+void deleteMovie(state_t* s, movie_t* ret) {
+  if(ret == NULL) {
+    printf("\nNo film found\n\n");
+    return;
+  }
+
+  int index = MAX_MOVIES;
+
+  for(int i = 0; i < s->totalMovies; i++) {
+    if(isEqual(&(s->movies[i]), ret)) {
+      index = i;
+      break;
+    }
+  }
+
+  for(int i = index; i < MAX_MOVIES - 1; i++) {
+    s->movies[i] = s->movies[i+1];
+  }
+
+  s->totalMovies--;
+  printf("\nMovie deleted sucessfully\n\n");
+}
+
+void rentMovie(movie_t* ret) {
+  if(ret == NULL) {
+    printf("\nError: Invalid reference to film\n\n");
+    return;
+  }
+
+  int qtde;
+  readint("Insert the quantity of copys: ", &qtde);
+
+  if(qtde > ret->qtde) {
+    printf("\nError: Insuficient stock\n\n");
+    return;
+  }
+
+  ret->qtde-=qtde;
+  ret->rent+=qtde;
+  printf("\nMovie has been rented sucessfully\n\n");
 }
 
 void showMovies(state_t* s) {
@@ -118,57 +212,4 @@ void loadMovies(state_t *s) {
     }
 
     fclose(file);
-}
-
-void deleteMovie(state_t* s) {
-  movie_t* ret = getMovie();
-
-  if(ret == NULL) {
-    printf("\nNo film found\n\n");
-    return;
-  }
-  printf("film found\n");
-
-  int index = -1;
-
-  for(int i = 0; i < s->totalMovies; i++) {
-    if(isEqual(&(s->movies[i]), ret)) {
-      index = i;
-      break;
-    }
-  }
-
-  printf("film found\n");
-
-  for(int i = index; i < MAX_MOVIES - 1; i++) {
-    s->movies[i] = s->movies[i+1];
-  }
-
-  s->totalMovies--;
-  printf("\nMovie deleted sucessfully\n\n");
-
-  s->dirty = true;
-}
-
-void rentMovie(state_t* s) {
-  movie_t* ret = getMovie();
-
-  if(ret == NULL) {
-    printf("\nNo film found\n\n");
-    return;
-  }
-
-  int qtde;
-  readint("Insert the quantity of copys: ", &qtde);
-
-  if(qtde > ret->qtde) {
-    printf("\nError: Insuficient stock\n\n");
-    return;
-  }
-
-  ret->qtde-=qtde;
-  ret->rent+=qtde;
-  printf("\nMovie has been rented sucessfully\n\n");
-
-  s->dirty = true;
 }

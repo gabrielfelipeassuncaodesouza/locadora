@@ -26,6 +26,6 @@ typedef struct {
 
 movie_t* getMovie();
 
-#define EXIT_CONST 8
+#define EXIT_CONST 6
 
 #endif

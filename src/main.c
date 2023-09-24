@@ -10,27 +10,6 @@
 
 state_t global;
 
-movie_t* getMovie() {
-  if(global.totalMovies == 0) {
-    printf("\nNo films on storage!\n\n");
-    return NULL;
-  }
-
-  movie_t* ret = NULL;
-
-  char name[MAX_STR];
-  readline("\nType the name of the film: ", name);
-
-  for(int i = 0; i < global.totalMovies; i++) {
-    if(strcmp(name, global.movies[i].title) == 0) {
-      ret = &(global.movies[i]);
-      break;
-    }
-  }
-
-  return ret;
-}
-
 void generateReceive(state_t* s) {
   printf("\n--RECIBO ALUGUEL DE FILMES--\n\n");
 
@@ -64,25 +43,19 @@ void quit() {
 void handle(int opt) {
   switch(opt) {
     case 1:
-      cadastrarFilme(&global);
+      registerMovie(&global);
       break;
     case 2:
       showMovies(&global);
       break;
     case 3:
-      searchMovie();
+      searchMovie(&global);
       break;
     case 4:
-      rentMovie(&global);
-      break;
-    case 5:
       generateReceive(&global);
       break;
-    case 6:
+    case 5:
       saveMovies(&global);
-      break;
-    case 7:
-      deleteMovie(&global);
       break;
     case EXIT_CONST:
       quit();
@@ -109,14 +82,12 @@ int main() {
     clearscr();
 
     printf("\nLocadora de Filmes\n");
-    printf("\n1 - Cadastrar Filme\n");
-    printf("2 - See movies Cadastrados\n");
+    printf("\n1 - Register movie\n");
+    printf("2 - See movies registered\n");
     printf("3 - Search a movie\n");
-    printf("4 - Rent a movie\n");
-    printf("5 - Generate receive\n");
-    printf("6 - Save Films\n");
-    printf("7 - Delete a movie\n");
-    printf("8 - Quit\n");
+    printf("4 - Generate receive\n");
+    printf("5 - Save Films\n");
+    printf("6 - Quit\n");
         
     readint("\n$> ", &opt);
 

@@ -16,10 +16,12 @@ $(TARGET): $(OBJS)
 
 test: $(OBJS_TEST)
 	$(CC) -o test $(OBJS_TEST) $(CFLAGS)
-	@ ./test
 
 clear:
 	rm -rf $(TARGET) *.o .*.o *~ $(SRC_DIR)/*.o $(SRC_DIR)/.*.o ./tests/*.o ./tests/.*.o
 
 run:
 	@ ./locadora
+
+run_test:
+	@ ./test

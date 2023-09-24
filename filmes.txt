@@ -1,3 +1,3 @@
 2
-{ "Caes de Aluguel", "Quentin Tarantino", 1993, 10.00, 10, 0 }
+{ "Caes de Aluguel", "Quentin Tarantino", 1993, 10.00, 5, 5 }
 { "Interestelar", "Christopher Nolan", 2014, 10.00, 10, 0 }
