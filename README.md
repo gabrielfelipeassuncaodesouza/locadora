@@ -21,7 +21,7 @@ This program was created as a complement work to get the marks of the subject Pr
 * In your terminal type
   
  ```console
-git clone https://github.com/gabrielfelipeassuncaodesouza/locadora
+git clone https://github.com/gabrielfelipeassuncaodesouza/video_store
 ```
 * Enter on the directory cloned and type `make` (you should have installed make and C compiler obviously).
 
