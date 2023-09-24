@@ -19,7 +19,7 @@ movie_t* getMovie(state_t* s) {
 
   int choice;
   do {
-    readint("\nDo you wanna search by name (1), director (2) or name AND director (3)? ", &choice);
+    readint("Do you wanna search by name (1), director (2) or name AND director (3)? ", &choice);
   } while(choice < 1 || choice > 3);
 
   if(choice == 1 || choice == 3)
@@ -85,7 +85,8 @@ void searchMovie(state_t *s) {
   int choice;
   printf("\nOptions avaliables: \n\n");
   printf("1 - Rent the movie\n");
-  printf("2 - Delete the movie\n");
+  printf("2 - Give back the movie\n");
+  printf("3 - Delete the movie\n");
   printf("NoneOfAbove - Do nothing\n");
 
   readint("\n$> ", &choice);
@@ -95,9 +96,51 @@ void searchMovie(state_t *s) {
     s->dirty = true;
   }
   else if(choice == 2) {
+    giveBack(ret);
+    s->dirty = true;
+  }
+  else if(choice == 3) {
     deleteMovie(s, ret);
     s->dirty = true;
   }
+}
+
+void rentMovie(movie_t* ret) {
+  if(ret == NULL) {
+    printf("\nError: Invalid reference to film\n\n");
+    return;
+  }
+
+  int qtde;
+  readint("\nInsert the quantity of copys: ", &qtde);
+
+  if(qtde > ret->qtde) {
+    printf("\nError: Insuficient stock\n\n");
+    return;
+  }
+
+  ret->qtde-=qtde;
+  ret->rent+=qtde;
+  printf("\nMovie has been rented sucessfully\n\n");
+}
+
+void giveBack(movie_t *ret) {
+  if(ret == NULL) {
+    printf("\nError: Invalid reference to film\n\n");
+    return;
+  }
+
+  int qtde;
+  readint("\nInsert the quantity of copys to give back: ", &qtde);
+
+  if(qtde > ret->rent) {
+    printf("\nError: You don't have rented this quantity of copys\n\n");
+    return;
+  }
+
+  ret->qtde+=qtde;
+  ret->rent-=qtde;
+  printf("\nMovie has been gave back sucessfully\n\n");
 }
 
 void deleteMovie(state_t* s, movie_t* ret) {
@@ -121,25 +164,6 @@ void deleteMovie(state_t* s, movie_t* ret) {
 
   s->totalMovies--;
   printf("\nMovie deleted sucessfully\n\n");
-}
-
-void rentMovie(movie_t* ret) {
-  if(ret == NULL) {
-    printf("\nError: Invalid reference to film\n\n");
-    return;
-  }
-
-  int qtde;
-  readint("Insert the quantity of copys: ", &qtde);
-
-  if(qtde > ret->qtde) {
-    printf("\nError: Insuficient stock\n\n");
-    return;
-  }
-
-  ret->qtde-=qtde;
-  ret->rent+=qtde;
-  printf("\nMovie has been rented sucessfully\n\n");
 }
 
 void showMovies(state_t* s) {
