@@ -10,25 +10,6 @@
 
 state_t global;
 
-void generateReceive(state_t* s) {
-  printf("\n--RECIBO ALUGUEL DE FILMES--\n\n");
-
-  int totalCopys = 0;
-  double totalCost = 0.0;
-
-  for(int i = 0; i < s->totalMovies; i++) {
-    if(s->movies[i].rent > 0) {
-      printf("Movie's name: %s\n", s->movies[i].title);
-      printf("Cópias alugadas: %d\n", s->movies[i].rent);
-      totalCopys+=(s->movies[i].rent);
-      totalCost+=(s->movies[i].rent * MOVIE_PRICE);
-    } 
-  }
-
-  printf("\n\nTotal de cópias alugadas: %d\n", totalCopys);
-  printf("Total a pagar: R$ %.2lf\n\n", totalCost);
-}
-
 void quit() {
   if(!global.dirty) return;
 

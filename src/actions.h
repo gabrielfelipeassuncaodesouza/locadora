@@ -12,5 +12,6 @@ void loadMovies(state_t *s);
 void deleteMovie(state_t *s, movie_t* ret);
 void rentMovie(movie_t* ret);
 void giveBack(movie_t* ret);
+void generateReceive(state_t* s);
 
 #endif

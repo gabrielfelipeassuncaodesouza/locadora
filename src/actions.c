@@ -19,7 +19,7 @@ movie_t* getMovie(state_t* s) {
 
   int choice;
   do {
-    readint("Do you wanna search by name (1), director (2) or name AND director (3)? ", &choice);
+    readint("\nDo you wanna search by name (1), director (2) or name AND director (3)? ", &choice);
   } while(choice < 1 || choice > 3);
 
   if(choice == 1 || choice == 3)
@@ -43,7 +43,7 @@ movie_t* getMovie(state_t* s) {
 
 void registerMovie(state_t* s) {
     if(s->totalMovies ==  MAX_MOVIES) {
-      printf("Got limit of films\n");
+      printf("\nAlcançou o limite máximo de filmes\n");
       return;
     }
 
@@ -52,18 +52,18 @@ void registerMovie(state_t* s) {
 
     printf("\n--- Cadastro de Filme ---\n\n");
 
-    readline("Enter the name of the movie: ", f.title);
-    readline("Enter the name of the director: ", f.director);
-    readint("Enter the year of release: ", &f.yearOfRelease);
-    readdouble("Enter the rating: ", &f.rating);
-    readint("Enter the quantity of copys in storage: ", &f.qtde);
+    readline("Digite o nome do filme: ", f.title);
+    readline("Digite o nome do diretor: ", f.director);
+    readint("Digite o ano de lançamento: ", &f.yearOfRelease);
+    readdouble("Digite a avaliação: ", &f.rating);
+    readint("Digite a quantidade de cópias: ", &f.qtde);
     f.rent = 0;
 
     //TODO: verifiy if the
 
     s->movies[s->totalMovies++] = f;
 
-    printf("\nFilm cadastred sucessfully!\n\n");
+    printf("\nFilmes cadastrados com sucesso!\n\n");
     s->dirty = true;
 }
 
@@ -71,7 +71,7 @@ void searchMovie(state_t *s) {
   movie_t* ret = getMovie(s);
 
   if(ret == NULL) {
-    printf("\nNo film found\n\n");
+    printf("\nFilme não encontrado\n\n");
     return;
   }    
 
@@ -83,11 +83,11 @@ void searchMovie(state_t *s) {
   printf("Cópias alugadas: %d\n", ret->rent);
 
   int choice;
-  printf("\nOptions avaliables: \n\n");
-  printf("1 - Rent the movie\n");
-  printf("2 - Give back the movie\n");
-  printf("3 - Delete the movie\n");
-  printf("NoneOfAbove - Do nothing\n");
+  printf("\nOpções disponíveis: \n\n");
+  printf("1 - Alugar cópias do filme\n");
+  printf("2 - Devolver cópias alugadas\n");
+  printf("3 - Deletar o filme\n");
+  printf("outro número - Não fazer nada\n");
 
   readint("\n$> ", &choice);
 
@@ -112,16 +112,16 @@ void rentMovie(movie_t* ret) {
   }
 
   int qtde;
-  readint("\nInsert the quantity of copys: ", &qtde);
+  readint("\nDigite a quantidade de cópias: ", &qtde);
 
   if(qtde > ret->qtde) {
-    printf("\nError: Insuficient stock\n\n");
+    printf("\nErro: estoque insuficiente\n\n");
     return;
   }
 
   ret->qtde-=qtde;
   ret->rent+=qtde;
-  printf("\nMovie has been rented sucessfully\n\n");
+  printf("\nCópias alugadas com sucesso\n\n");
 }
 
 void giveBack(movie_t *ret) {
@@ -131,21 +131,21 @@ void giveBack(movie_t *ret) {
   }
 
   int qtde;
-  readint("\nInsert the quantity of copys to give back: ", &qtde);
+  readint("\nDigite quantas cópias quer devolver: ", &qtde);
 
   if(qtde > ret->rent) {
-    printf("\nError: You don't have rented this quantity of copys\n\n");
+    printf("\nErro: você não alugou essa quantidade de filmes\n\n");
     return;
   }
 
   ret->qtde+=qtde;
   ret->rent-=qtde;
-  printf("\nMovie has been gave back sucessfully\n\n");
+  printf("\nCópias devolvidas com sucesso\n\n");
 }
 
 void deleteMovie(state_t* s, movie_t* ret) {
   if(ret == NULL) {
-    printf("\nNo film found\n\n");
+    printf("\nFilme não encontrado\n\n");
     return;
   }
 
@@ -163,12 +163,12 @@ void deleteMovie(state_t* s, movie_t* ret) {
   }
 
   s->totalMovies--;
-  printf("\nMovie deleted sucessfully\n\n");
+  printf("\nFilme deletado com sucesso!\n\n");
 }
 
 void showMovies(state_t* s) {
   if (s->totalMovies == 0) {
-    printf("\nNo films on storage!\n\n");
+    printf("\nNenhum filme cadastrado :(\n\n");
     return;
   }
 
@@ -182,13 +182,13 @@ void showMovies(state_t* s) {
 
 void saveMovies(state_t* s) {
   if(s->totalMovies == 0) {
-    printf("\nNo film storaged\n\n");
+    printf("\nNenhum filme cadastrado :(\n\n");
     return;
   }
 
   FILE *file = fopen(ARQUIVO, "w");
   if (file == NULL) {
-    printf("Erro ao salvar os filmes!\n");
+    printf("\nErro ao salvar os filmes :(\n");
     return;
   }
 
@@ -207,14 +207,14 @@ void saveMovies(state_t* s) {
     }
 
   fclose(file);
-  printf("\nFilmes salvos com sucesso!\n\n");
+  printf("\nFilmes salvos com sucesso :D\n\n");
   s->dirty = false;
 }
 
 void loadMovies(state_t *s) {
     FILE *file = fopen(ARQUIVO, "r");
     if (file == NULL) {
-        printf("Error when loading the movies\n");
+        printf("\nErro ao carregar filmes :(\n");
         return;
     }
 
@@ -236,4 +236,23 @@ void loadMovies(state_t *s) {
     }
 
     fclose(file);
+}
+
+void generateReceive(state_t* s) {
+  printf("\n--RECIBO ALUGUEL DE FILMES--\n\n");
+
+  int totalCopys = 0;
+  double totalCost = 0.0;
+
+  for(int i = 0; i < s->totalMovies; i++) {
+    if(s->movies[i].rent > 0) {
+      printf("Nome do filme: %s\n", s->movies[i].title);
+      printf("Cópias alugadas: %d\n", s->movies[i].rent);
+      totalCopys+=(s->movies[i].rent);
+      totalCost+=(s->movies[i].rent * MOVIE_PRICE);
+    } 
+  }
+
+  printf("\n\nTotal de cópias alugadas: %d\n", totalCopys);
+  printf("Total a pagar: R$ %.2lf\n\n", totalCost);
 }
