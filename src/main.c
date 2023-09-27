@@ -46,7 +46,7 @@ void handle(int opt) {
   }
 
   if(opt != EXIT_CONST)
-    pause("Press any key to continue... ");
+    pause("Press enter to continue... ");
 }
 
 void init() {
@@ -54,10 +54,28 @@ void init() {
   global.dirty = false;
 }
 
+void printHeader() {
+  clearscr();
+
+  printf("\n\n");
+  printf("\t __                                  __                                                       \n");
+  printf("\t/\\ \\                                /\\ \\                                                  \n");
+  printf("\t\\ \\ \\        ___     ___     __     \\_\\ \\    ___   _ __    __                           \n");
+  printf("\t \\ \\ \\  __  / __`\\  /'___\\ /'__`\\   /'_` \\  / __`\\/\\`'__\\/'__`\\                    \n");
+  printf("\t  \\ \\ \\L\\ \\/\\ \\L\\ \\/\\ \\__//\\ \\L\\.\\_/\\ \\L\\ \\/\\ \\L\\ \\ \\ \\//\\ \\L\\.\\_\n"); 
+  printf("\t   \\ \\____/\\ \\____/\\ \\____\\ \\__/.\\_\\ \\___,_\\ \\____/\\ \\_\\  \\__/.\\_\\         \n");
+  printf("\t    \\/___/  \\/___/  \\/____/\\/__/\\/_/\\/__,_ /\\/___/  \\/_/ \\/__/\\/_/                  \n");
+                                                                    
+  printf("\n\n");
+  pause("\tBem vindo à locadora :D. Pressione enter para continuar... ");
+}
+
 int main() {
   init();
   loadMovies(&global);
   int opt;
+
+  printHeader();
 
   do {
     clearscr();
