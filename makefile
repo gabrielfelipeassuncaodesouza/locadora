@@ -18,7 +18,7 @@ test: $(OBJS_TEST)
 	$(CC) -o test $(OBJS_TEST) $(CFLAGS)
 
 clear:
-	rm -rf $(TARGET) *.o .*.o *~ $(SRC_DIR)/*.o $(SRC_DIR)/.*.o ./tests/*.o ./tests/.*.o
+	rm -rf $(TARGET) *.o .*.o *~ $(SRC_DIR)/*.o $(SRC_DIR)/.*.o ./tests/*.o ./tests/.*.o test
 
 run:
 	@ ./locadora
