@@ -36,8 +36,3 @@ git clone https://github.com/gabrielfelipeassuncaodesouza/video_store
 * In Ubuntu and derivates type `sudo apt install make`
 * In Arch and derivates type `sudo pacman -S cmake`
 * In RedHat and derivates type `sudo dnf -y install make`
-
-## Colaborators
-
-* [Gabriel Felipe](https://github.com/gabrielfelipeassuncaodesouza)
-* [Mateus Magalhaês](https://github.com/mateus-mglh)
