@@ -8,6 +8,8 @@
 int strEq(char* str1, char* str2) {
   if(strlen(str1) != strlen(str2)) return 0;
 
+  if(str1 == NULL || str2 == NULL) return 0;
+
   for(int i = 0; i < strlen(str1); i++) {
     if(tolower(str1[i]) != tolower(str2[i])) return 0;
   }

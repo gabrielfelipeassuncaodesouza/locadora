@@ -100,8 +100,13 @@ void searchMovie(state_t *s) {
     s->dirty = true;
   }
   else if(choice == 3) {
-    deleteMovie(s, ret);
-    s->dirty = true;
+    if(!deleteMovie(s, ret)) {
+      printError("\n\tFilme não encontrado\n\n");
+    }
+    else {
+      printSucess("\n\tFilme deletado com sucesso!\n\n");
+      s->dirty = true;
+    }
   }
 }
 
@@ -143,11 +148,8 @@ void giveBack(movie_t *ret) {
   printSucess("\n\tCópias devolvidas com sucesso\n\n");
 }
 
-void deleteMovie(state_t* s, movie_t* ret) {
-  if(ret == NULL) {
-    printError("\n\tFilme não encontrado\n\n");
-    return;
-  }
+int deleteMovie(state_t* s, movie_t* ret) {
+  if(ret == NULL) return 0;
 
   int index = MAX_MOVIES;
 
@@ -163,7 +165,7 @@ void deleteMovie(state_t* s, movie_t* ret) {
   }
 
   s->totalMovies--;
-  printSucess("\n\tFilme deletado com sucesso!\n\n");
+  return 1;
 }
 
 void showMovies(state_t* s) {
@@ -261,4 +263,6 @@ void generateReceive(state_t* s) {
 
   printf("\n\n\tTotal de cópias alugadas: %d\n", totalCopys);
   printf("\tTotal a pagar: R$ %.2lf\n\n", totalCost);
+
+  stop("\tPressione enter para continuar ...");
 }

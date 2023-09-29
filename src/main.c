@@ -15,9 +15,9 @@ void quit() {
   if(!global.dirty) return;
 
   char choice;
-  readchar("\n\tDeseja salvar as alterações [y/n]? ", &choice);
+  readchar("\n\tDeseja salvar as alterações [s/n]? ", &choice);
 
-  if(tolower(choice) == 'y') {
+  if(tolower(choice) == 's') {
     saveMovies(&global);
   }
 }
