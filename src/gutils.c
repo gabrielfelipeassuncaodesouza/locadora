@@ -1,8 +1,19 @@
 #include "globconst.h"
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+int strEq(char* str1, char* str2) {
+  if(strlen(str1) != strlen(str2)) return 0;
+
+  for(int i = 0; i < strlen(str1); i++) {
+    if(tolower(str1[i]) != tolower(str2[i])) return 0;
+  }
+
+  return 1;
+}
 
 void readline(const char* msg, char* dest) {
   printf(msg);
@@ -34,8 +45,8 @@ void aloca(movie_t* m) {
 }
 
 int isEqual(movie_t* m1, movie_t* m2) {
-  return strcmp(m1->title, m2->title) == 0 &&
-          strcmp(m1->director, m2->director) == 0 &&
+  return strEq(m1->title, m2->title) &&
+          strEq(m1->director, m2->director) &&
           m1->yearOfRelease == m2->yearOfRelease &&
           m1->rating == m2->rating &&
           m1->qtde == m2->qtde &&
@@ -47,7 +58,15 @@ void clearscr() {
   printf("\x1b[H");
 }
 
-void pause(const char* msg) {
+void stop(const char* msg) {
   printf(msg);
   getchar();
+}
+
+void printError(const char* msg) {
+  printf("\x1b[31m%s\x1b[m", msg);
+}
+
+void printSucess(const char* msg) {
+  printf("\x1b[32m%s\x1b[m", msg);
 }

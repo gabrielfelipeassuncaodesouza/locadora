@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 state_t global;
 
@@ -14,7 +15,7 @@ void quit() {
   if(!global.dirty) return;
 
   char choice;
-  readchar("\nDeseja salvar as alterações [y/n]? ", &choice);
+  readchar("\n\tDeseja salvar as alterações [y/n]? ", &choice);
 
   if(tolower(choice) == 'y') {
     saveMovies(&global);
@@ -42,11 +43,11 @@ void handle(int opt) {
       quit();
       break;
     default:
-      printf("Invalid option!\n");
+      printError("\n\tOpção inválida!\n");
   }
 
   if(opt != EXIT_CONST)
-    pause("Press enter to continue... ");
+    usleep(1000000);
 }
 
 void init() {
@@ -67,7 +68,7 @@ void printHeader() {
   printf("\t    \\/___/  \\/___/  \\/____/\\/__/\\/_/\\/__,_ /\\/___/  \\/_/ \\/__/\\/_/                  \n");
                                                                     
   printf("\n\n");
-  pause("\tBem vindo à locadora :D. Pressione enter para continuar... ");
+  stop("\tBem vindo à locadora :D. Pressione enter para continuar... ");
 }
 
 int main() {
@@ -80,15 +81,15 @@ int main() {
   do {
     clearscr();
 
-    printf("\nLocadora de Filmes\n");
-    printf("\n1 - Register movie\n");
-    printf("2 - See movies registered\n");
-    printf("3 - Search a movie\n");
-    printf("4 - Generate receive\n");
-    printf("5 - Save Films\n");
-    printf("6 - Quit\n");
+    printf("\n\tLocadora de Filmes\n");
+    printf("\n\t1 - Adicionar filme\n");
+    printf("\t2 - Ver filmes disponíveis\n");
+    printf("\t3 - Pesquisar um filme\n");
+    printf("\t4 - Gerar recibo\n");
+    printf("\t5 - Salvar alterações\n");
+    printf("\t6 - Sair\n");
         
-    readint("\n$> ", &opt);
+    readint("\n\t$> ", &opt);
 
     handle(opt); 
 
