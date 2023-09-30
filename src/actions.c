@@ -19,6 +19,7 @@ movie_t* getMovie(state_t* s) {
 
   int choice;
   do {
+    clearscr();
     readint("\n\tDeseja pesquisar por:(1) nome, diretor(2) ou nome E diretor(3)? ", &choice);
   } while(choice < 1 || choice > 3);
 
@@ -69,7 +70,7 @@ void searchMovie(state_t *s) {
   movie_t* ret = getMovie(s);
 
   if(ret == NULL) {
-    printf("\n\tFilme não encontrado\n\n");
+    printError("\n\tFilme não encontrado\n\n");
     return;
   }    
 
