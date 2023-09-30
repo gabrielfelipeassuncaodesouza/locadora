@@ -59,8 +59,6 @@ void registerMovie(state_t* s) {
     readint("\tDigite a quantidade de cópias: ", &f.qtde);
     f.rent = 0;
 
-    //TODO: verifiy if the
-
     s->movies[s->totalMovies++] = f;
 
     printSucess("\n\tFilme cadastrado com sucesso!\n\n");
