@@ -9,8 +9,10 @@ void readint(const char* msg, int* dest);
 void readdouble(const char* msg, double* dest);
 
 void aloca(movie_t* m);
+void libera(movie_t* m);
 int isEqual(movie_t* m1, movie_t* m2);
 int strEq(char* str1, char* str2);
+char *trim(char *s);
 void stop(const char* msg);
 void clearscr();
 void printError(const char* msg);

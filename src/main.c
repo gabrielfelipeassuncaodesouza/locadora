@@ -42,8 +42,6 @@ void handle(int opt) {
     case EXIT_CONST:
       quit();
       break;
-    default:
-      printError("\n\tOpção inválida!\n");
   }
 
   if(opt != EXIT_CONST)
@@ -90,6 +88,21 @@ int main() {
     printf("\t6 - Sair\n");
         
     readint("\n\t$> ", &opt);
+
+    /**
+    if(!isdigit(opt)) {
+      printError("\n\tOpção inválida\n");
+      fflush(stdout);
+      usleep(1000000);
+      continue;
+    }
+    **/
+    if((opt < 1 || opt > 6)) {
+      printError("\n\tOpção inválida\n");
+      fflush(stdout);
+      usleep(1000000);
+      continue;
+    }
 
     handle(opt); 
 

@@ -55,9 +55,25 @@ void registerMovie(state_t* s) {
 
     readline("\tDigite o nome do filme: ", f.title);
     readline("\tDigite o nome do diretor: ", f.director);
+
     readint("\tDigite o ano de lançamento: ", &f.yearOfRelease);
-    readdouble("\tDigite a avaliação: ", &f.rating);
+    if(f.yearOfRelease < 1900 || f.yearOfRelease > 2023) {
+      printError("\n\tDados inválidos!\n\tTente novamente\n");
+      return;
+    }
+
+    readdouble("\tDigite a avaliação (entre 0 e 10): ", &f.rating);
+    if(f.rating < 0 || f.rating > 10) {
+      printError("\n\tDados inválidos!\n\tTente novamente\n");
+      return;
+    }
+
     readint("\tDigite a quantidade de cópias: ", &f.qtde);
+    if(f.qtde <= 0) {
+      printError("\n\tDados inválidos!\n\tTente novamente\n");
+      return;
+    }
+
     f.rent = 0;
 
     s->movies[s->totalMovies++] = f;
@@ -83,8 +99,8 @@ void searchMovie(state_t *s) {
 
   int choice;
   printf("\n\tOpções disponíveis: \n\n");
-  printf("\t1 - Alugar cópias do filme\n");
-  printf("\t2 - Devolver cópias alugadas\n");
+  printf("\t1 - Alugar o filme\n");
+  printf("\t2 - Devolve o filme\n");
   printf("\t3 - Deletar o filme\n");
   printf("\toutro número - Não fazer nada\n");
 
@@ -115,17 +131,14 @@ void rentMovie(movie_t* ret) {
     return;
   }
 
-  int qtde;
-  readint("\n\tDigite a quantidade de cópias: ", &qtde);
-
-  if(qtde > ret->qtde) {
-    printError("\n\tErro: estoque insuficiente\n\n");
+  if(ret->qtde == 0) {
+    printError("\n\tErro: Estoque insuficiente\n\n");
     return;
   }
 
-  ret->qtde-=qtde;
-  ret->rent+=qtde;
-  printSucess("\n\tCópias alugadas com sucesso\n\n");
+  ret->qtde--;
+  ret->rent++;
+  printSucess("\n\tUma cópia alugada com sucesso\n\n");
 }
 
 void giveBack(movie_t *ret) {
@@ -134,17 +147,14 @@ void giveBack(movie_t *ret) {
     return;
   }
 
-  int qtde;
-  readint("\n\tDigite quantas cópias quer devolver: ", &qtde);
-
-  if(qtde > ret->rent) {
-    printError("\n\tErro: você não alugou essa quantidade de filmes\n\n");
+  if(ret->rent == 0) {
+    printError("\n\tErro: Sem cópias alugadas\n\n");
     return;
   }
 
-  ret->qtde+=qtde;
-  ret->rent-=qtde;
-  printSucess("\n\tCópias devolvidas com sucesso\n\n");
+  ret->qtde++;
+  ret->rent--;
+  printSucess("\n\tUma cópia devolvida com sucesso\n\n");
 }
 
 int deleteMovie(state_t* s, movie_t* ret) {

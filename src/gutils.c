@@ -1,4 +1,6 @@
+
 #include "globconst.h"
+#include "gutils.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -19,8 +21,13 @@ int strEq(char* str1, char* str2) {
 
 void readline(const char* msg, char* dest) {
   printf(msg);
-  fgets(dest, MAX_STR, stdin);
-  dest[strcspn(dest, "\n")] = '\0';
+  char* aux = (char*)malloc(sizeof(char)*MAX_STR);
+
+  fgets(aux, MAX_STR, stdin);
+  aux[strcspn(aux, "\n")] = '\0';
+  aux = trim(aux);
+
+  strcpy(dest, aux);
 }
 
 void readchar(const char* msg, char* dest) {
@@ -44,6 +51,11 @@ void readdouble(const char* msg, double* dest) {
 void aloca(movie_t* m) {
   m->title = (char*)malloc(sizeof(char)*MAX_STR);
   m->director = (char*)malloc(sizeof(char)*MAX_STR);
+}
+
+void libera(movie_t* m) {
+  free(m->title);
+  free(m->director);
 }
 
 int isEqual(movie_t* m1, movie_t* m2) {
@@ -72,3 +84,28 @@ void printError(const char* msg) {
 void printSucess(const char* msg) {
   printf("\x1b[32m%s\x1b[m", msg);
 }
+
+char *ltrim(char *s) 
+{     
+    while(isspace(*s)) s++;     
+    return s; 
+}  
+
+char *rtrim(char *s) 
+{     
+    char* back;
+    int len = strlen(s);
+
+    if(len == 0)
+        return(s); 
+
+    back = s + len;     
+    while(isspace(*--back));     
+    *(back+1) = '\0';     
+    return s; 
+}  
+
+char *trim(char *s) 
+{     
+    return rtrim(ltrim(s));  
+} 
